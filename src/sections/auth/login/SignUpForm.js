@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
@@ -19,23 +20,37 @@ export default function SignUpForm() {
     confirmpassword:""
   })
 
-  const handleClick = () => {
-    navigate('/dashboard', { replace: true });
+  const handleClick = async () => {
+    
+    try {
+      const response = await axios.post(`/api/auth/signup`, {
+        email: mainState.email,
+        password: mainState.password
+      });
+      console.log(response)
+      // saving the encodedToken in the localStorage
+      if(response.status){
+        alert(response.status);
+        localStorage.setItem("token", response.data.encodedToken);
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
   };
   
 
   const handleChange = (event)=>{
    
-   const name = event.target.name;
-   const value = event.target.value;
-   console.log(name,value);
-    setMainState({...mainState,name :value})
+
+      const value = event.target.value;
+     setMainState({...mainState, [event.target.name]:value})
   }
 
   return (
     <>
       <Stack spacing={3} sx={{mb:2}}>
-        <TextField name="email" label="Email address" onChange={(e)=> handleChange(e)} value={mainState.email}/>
+        <TextField name="email" label="Email address" onChange={(event)=> handleChange(event)} value={mainState.email}/>
 
         <TextField
           name="password"
