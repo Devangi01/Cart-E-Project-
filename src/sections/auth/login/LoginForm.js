@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
@@ -7,31 +8,67 @@ import { LoadingButton } from '@mui/lab';
 import Iconify from '../../../components/iconify';
 
 
+
+
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [mainState, setMainState] = useState({
+    email: "",
+    password: "",
+    showPassword: false,
+  })
+ 
 
-  const handleClick = () => {
-    navigate('/dashboard', { replace: true });
+  const handleChange = (event) => {
+    
+   setMainState({...mainState, [event.target.name]: event.target.value})
+  }
+  const encodedToken = localStorage.getItem("token");
+  console.log(encodedToken)
+  const handleClick = async () => {
+    
+    try {
+      const response = await axios.post(`/api/auth/login`, {
+        email: mainState.email,
+        password: mainState.password,
+        headers: {
+          authorization: encodedToken, // passing token as an authorization header
+        },
+        
+      });
+      console.log(response)
+      // saving the encodedToken in the localStorage
+      // if(response.status){
+      //   alert(response.status);
+      //   localStorage.setItem("token", response.data.encodedToken);
+       
+      // }
+      
+    } catch (error) {
+      console.log(error);
+    }
+
   };
 
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField name="email" label="Email address" onChange={(event)=> handleChange(event)} value={mainState.email}/>
 
         <TextField
           name="password"
           label="Password"
-          type={showPassword ? 'text' : 'password'}
+          value= {mainState.password}
+          onChange={(event)=> handleChange(event)}
+          type={mainState.showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                <IconButton onClick={() => setMainState({...mainState, showPassword:!mainState.showPassword})} edge="end">
+                  <Iconify icon={mainState.showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                 </IconButton>
               </InputAdornment>
             ),
