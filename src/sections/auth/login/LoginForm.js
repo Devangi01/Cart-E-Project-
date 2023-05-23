@@ -6,6 +6,7 @@ import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
 
+
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
@@ -45,9 +46,16 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
+
+      <Stack direction="row" spacing={2}>
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
         Login
       </LoadingButton>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+        Login as guest
+      </LoadingButton>
+  
+</Stack>
     </>
   );
 }
