@@ -46,6 +46,13 @@ export default function LoginForm() {
       //   localStorage.setItem("token", response.data.encodedToken);
        
       // }
+      if(response.status === 200){
+        alert(response.status);
+        localStorage.setItem("token", response.data.encodedToken);
+        navigate('/dashboard', { replace: true });
+  
+      }
+     
       
     } catch (error) {
       console.log(error);

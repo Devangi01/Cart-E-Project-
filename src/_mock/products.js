@@ -4,7 +4,7 @@ import { sample } from 'lodash';
 // ----------------------------------------------------------------------
 
 const PRODUCT_NAME = [
-  'Nike Air Force 1 NDESTRUKT',
+  'Ajjjjj  Nike Air Force 1 NDESTRUKT',
   'Nike Space Hippie 04',
   'Nike Air Zoom Pegasus 37 A.I.R. Chaz Bear',
   'Nike Blazer Low 77 Vintage',

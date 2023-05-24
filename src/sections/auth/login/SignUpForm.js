@@ -32,6 +32,7 @@ export default function SignUpForm() {
       if(response.status){
         alert(response.status);
         localStorage.setItem("token", response.data.encodedToken);
+  
       }
       
     } catch (error) {
