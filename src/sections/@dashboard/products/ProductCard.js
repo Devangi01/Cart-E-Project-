@@ -26,7 +26,7 @@ const StyledProductImg = styled('img')({
 });
 
 // ----------------------------------------------------------------------
-
+  
 ShopProductCard.propTypes = {
   product: PropTypes.object,
 };

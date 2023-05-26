@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
 
 import { makeServer } from "./server";
+import { MainProvider } from './context/MainContext';
 
 // ----------------------------------------------------------------------
 
@@ -14,7 +15,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 // Call make Server
 makeServer();
 
-root.render(<App />);
+root.render(
+    <MainProvider>
+<App />
+    </MainProvider>
+);
 
 // If you want to enable client cache, register instead.
 serviceWorker.unregister();

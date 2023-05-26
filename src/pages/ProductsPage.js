@@ -1,18 +1,25 @@
+
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+ // Adjust the file path accordingly
+
+
 // @mui
 import { Container, Stack, Typography } from '@mui/material';
+import { MainContext } from '../context/MainContext';
 // components
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
 import PRODUCTS from '../_mock/products';
 
+
 // ----------------------------------------------------------------------
 
 
-
 export default function ProductsPage() {
+
+const {mainState, setMainState} = useContext(MainContext)
 
   const encodedToken = localStorage.getItem("token");
   const [openFilter, setOpenFilter] = useState(false);
@@ -25,8 +32,7 @@ export default function ProductsPage() {
     setOpenFilter(false);
   };
 
-  const [productData,setProductData] = useState([])
-
+  
   useEffect(()=> {
     const fecthProduct = async () => {
       try {
@@ -36,7 +42,9 @@ export default function ProductsPage() {
           },
 
         });
-        setProductData(response.data.products)
+
+        setMainState({...mainState,productData:response.data.products})
+        
   console.log(response.data.products)
       } catch (error) {
         console.log(error);
@@ -48,6 +56,7 @@ export default function ProductsPage() {
   return (
     <>
       <Helmet>
+        
         <title> Dashboard: Products | Minimal UI </title>
       </Helmet>
 
@@ -67,7 +76,7 @@ export default function ProductsPage() {
           </Stack>
         </Stack>
 
-        <ProductList products={productData} />
+        <ProductList products={mainState.productData} />
         <ProductCartWidget />
       </Container>
     </>
