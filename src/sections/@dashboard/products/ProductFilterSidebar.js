@@ -52,9 +52,38 @@ ShopFilterSidebar.propTypes = {
 export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFilter }) {
   const { mainState, setMainState } = useContext(MainContext);
   const handleChange = (event, name) => {
-    console.log(name, event.target.value);
-    setMainState({ ...mainState });
+ name = name.toLowerCase();
+
+
+    const getFilterObject = mainState.filterState;
+    if(name==="gender" && event.target.checked){
+      getFilterObject[name]=[...getFilterObject[name],event.target.value];
+    }else if(name==="gender" && event.target.checked === false){
+      const d = getFilterObject[name].filter((data) => data !== name);
+      getFilterObject[name] = getFilterObject[name].filter((data) => data !== event.target.value);
+    } 
+    else{
+      getFilterObject[name]=event.target.value  ;
+    }
+ 
+    setMainState({ ...mainState, getFilterObject });
   };
+  
+  function filterArray(array, filters) {
+    const filterKeys = Object.keys(filters);
+    return array.filter(item => {
+      // validates all filter criteria
+      return filterKeys.every(key => {
+        // ignores non-function predicates
+        if (typeof filters[key] !== 'function') return true;
+        return filters[key](item[key]);
+      });
+    });
+  }
+  
+  
+  const filterData = filterArray(mainState.productData,mainState.filterState)
+  console.log("->>>>>>>>>>>>>>>>",filterData);
   console.log(mainState.filterState);
   return (
     <>
