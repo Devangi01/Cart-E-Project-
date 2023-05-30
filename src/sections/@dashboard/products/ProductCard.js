@@ -32,7 +32,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { title , price, categoryName, img, rating ,_id} = product;
+  const { title , price, category, img, rating ,_id} = product;
  
   const [mainProductCardState, setMainProductCardState] = useState({
         wishlistIconFlag:true,
@@ -47,10 +47,10 @@ const handleIconClick = (id,iconName)=>{
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-      {categoryName && (
+      {category && (
           <Label
             variant="filled"
-            color={(categoryName === 'shoes' && 'error') || 'info'}
+            color={(category === 'shoes' && 'error') || 'info'}
             sx={{
               zIndex: 9,
               top: 16,
@@ -59,7 +59,7 @@ const handleIconClick = (id,iconName)=>{
               textTransform: 'uppercase',
             }}
           >
-            {categoryName}
+            {category}
           </Label>
         )}
         <StyledProductImg alt={title} src={img} />

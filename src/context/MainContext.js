@@ -6,14 +6,18 @@ export const MainProvider = ({ children }) => {
    
   const [mainState, setMainState] = useState({
         filterState:{
-            Gender:[],
-            Category:"",
-            Price:"",
-            Rating:""
+            gender:[],
+            category:"",
+            price:[],
+            rating:""
         },
         productData:[
 
+        ],
+        storeOriginalProductData:[
+          
         ]
+
   });
 
   return <MainContext.Provider value = {{mainState, setMainState}}>{children}</MainContext.Provider>;

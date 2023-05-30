@@ -43,7 +43,7 @@ const {mainState, setMainState} = useContext(MainContext)
 
         });
 
-        setMainState({...mainState,productData:response.data.products})
+        setMainState({...mainState,productData:response.data.products,storeOriginalProductData:response.data.products})
         
   console.log(response.data.products)
       } catch (error) {
