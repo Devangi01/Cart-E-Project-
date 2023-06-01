@@ -22,8 +22,8 @@ const navConfig = [
     icon: icon('ic_cart'),
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
+    title: 'Wishlist Management',
+    path: '/dashboard/wishlist',
     icon: icon('ic_blog'),
   },
   {

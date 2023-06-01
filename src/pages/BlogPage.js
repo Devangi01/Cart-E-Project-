@@ -1,11 +1,20 @@
+
+import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
+import { useContext, useEffect, useState } from 'react';
+ // Adjust the file path accordingly
+
+
 // @mui
-import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography } from '@mui/material';
+import { MainContext } from '../context/MainContext';
 // components
-import Iconify from '../components/iconify';
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
+// import ProductWishlist from 'src/sections/@dashboard/products/ProductWishlist';
+import  ProductWishlist  from '../sections/@dashboard/products/ProductWishlist';
 // mock
-import POSTS from '../_mock/blog';
+import PRODUCTS from '../_mock/products';
+
+
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +27,41 @@ const SORT_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function BlogPage() {
+  const {mainState, setMainState} = useContext(MainContext)
+
+  const encodedToken = localStorage.getItem("token");
+  const [openFilter, setOpenFilter] = useState(false);
+
+  const handleOpenFilter = () => {
+    setOpenFilter(true);
+  };
+
+  const handleCloseFilter = () => {
+    setOpenFilter(false);
+  };
+
+  
+  useEffect(()=> {
+    const fecthProduct = async () => {
+      try {
+        const response = await axios.get(`/api/products`, {
+          headers: {
+            authorization: encodedToken, // passing token as an authorization header
+          },
+
+        });
+
+        setMainState({...mainState,productData:response.data.products,storeOriginalProductData:response.data.products})
+        
+  console.log(response.data.products)
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+    fecthProduct();
+  },[])
+
   return (
     <>
       <Helmet>
@@ -25,25 +69,12 @@ export default function BlogPage() {
       </Helmet>
 
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Blog
-          </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Post
-          </Button>
-        </Stack>
+      <Typography variant="h4" sx={{ mb: 5 }}>
+         Wishlist Management
+        </Typography>
 
-        <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <BlogPostsSearch posts={POSTS} />
-          <BlogPostsSort options={SORT_OPTIONS} />
-        </Stack>
-
-        <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <BlogPostCard key={post.id} post={post} index={index} />
-          ))}
-        </Grid>
+        <ProductWishlist products={mainState.productData} />
+    
       </Container>
     </>
   );
