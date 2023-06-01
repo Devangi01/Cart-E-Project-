@@ -11,7 +11,7 @@ export const products =  [
     title: " Nike Air Force 1 NDESTRUKT",
     price: "5000",
     category: "shoes",
-    gender: "women",
+    gender: "women",  
     img:"/assets/images/products/product_1.jpg",
     rating:3,
   },
