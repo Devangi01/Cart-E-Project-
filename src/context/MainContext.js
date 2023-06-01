@@ -5,12 +5,11 @@ export const MainContext = createContext();
 export const MainProvider = ({ children }) => {
    
   const [mainState, setMainState] = useState({
-        filterState:{
-            gender:[],
-            category:"",
-            price:[],
-            rating:""
-        },
+    filterState:{
+      category:[],
+        price:"",
+        rating:""
+    },
         productData:[
 
         ],

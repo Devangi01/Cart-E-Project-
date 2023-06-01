@@ -18,6 +18,7 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import Slider from '@mui/material/Slider';
+
 // components
 import { MainContext } from '../../../context/MainContext'; // Adjust the file path accordingly
 
@@ -33,14 +34,10 @@ export const SORT_BY_OPTIONS = [
   { value: 'priceDesc', label: 'Price: High-Low' },
   { value: 'priceAsc', label: 'Price: Low-High' },
 ];
-export const FILTER_GENDER_OPTIONS = ['Men', 'Women', 'Kids'];
+export const FILTER_PRICE_OPTIONS = ['low to high', 'high to low'];
 export const FILTER_CATEGORY_OPTIONS = ['All', 'Shoes', 'Clothes', 'Jewellery'];
 export const FILTER_RATING_OPTIONS = ['4', '3', '2', '1'];
-export const FILTER_PRICE_OPTIONS = [
-  { value: 'below', label: 'Below $25' },
-  { value: 'between', label: 'Between $25 - $75' },
-  { value: 'above', label: 'Above $75' },
-];
+
 
 // ----------------------------------------------------------------------
 
@@ -52,35 +49,7 @@ ShopFilterSidebar.propTypes = {
 
 export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFilter }) {
   
-  const minDistance = 1000;
-  const [value2, setValue2] = useState([1000,2000]);
-
   const { mainState, setMainState } = useContext(MainContext);
-
- 
-  const handleChange2 = (event,newValue,activeThumb) => {
-    if (!Array.isArray(newValue)) {
-      return;
-    }
-    if (newValue[1] - newValue[0] < minDistance) {
-      if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 20000 - minDistance);
-        setValue2([clamped, clamped + minDistance]);
-      } else {
-        const clamped = Math.max(newValue[1], minDistance);
-        setValue2([clamped - minDistance, clamped]);
-      }
-    } else {
-      setValue2(newValue);
-    }
-  };
-
-  useEffect(()=>{
-    const updateObject = mainState.filterState;
-    updateObject.price = value2;
-    setMainState({ ...mainState,updateObject});
-  },[value2])
-
   
   function jumpToProcessFilterFunction(){
     console.log("calll");
@@ -92,20 +61,25 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
 
   function filterRecord(inputArray,filterObject){
     console.log(inputArray,filterObject)
-   const filterData =  inputArray.filter((eachObject)=> eachObject.category.toLowerCase() === filterObject.category.toLowerCase());
-    return filterData;
+   // const filterData =  inputArray.filter((eachObject)=> eachObject.category.toLowerCase() === filterObject.category.toLowerCase() && (filterObject.gender.includes(eachObject.gender)) && (eachObject.price > filterObject.price[0] &&  eachObject.price < filterObject.price[1]) && eachObject.rating>=filterObject.rating);
+   let filterData = [];
+   if(filterObject.category.includes("all")){
+    filterData =   inputArray.filter((eachObject)=> eachObject.rating >= filterObject.rating);
+   }else{
+    filterData =   inputArray.filter((eachObject)=> filterObject.category.includes(eachObject.category) && eachObject.rating >= filterObject.rating);
+
+   }
+   const sortingData =  filterObject.price === "low to high" ? filterData.sort((a,b)=>a.price - b.price) : filterData.sort((a,b)=>b.price - a.price);
+   return sortingData;
   }
-
-
 
   const handleChange = (event, name) => {
   name = name.toLowerCase();
     const getFilterObject = mainState.filterState;
-    if(name==="gender" && event.target.checked){
-      getFilterObject[name]=[...getFilterObject[name],event.target.value];
-    }else if(name==="gender" && event.target.checked === false){
-      const d = getFilterObject[name].filter((data) => data !== name);
-      getFilterObject[name] = getFilterObject[name].filter((data) => data !== event.target.value);
+    if(name==="category" && event.target.checked){
+      getFilterObject[name]=[...getFilterObject[name],event.target.value.toLowerCase()];
+    }else if(name==="category" && event.target.checked === false){
+      getFilterObject[name] = getFilterObject[name].filter((data) => data !== event.target.value.toLowerCase());
     } 
     else{
       getFilterObject[name]=event.target.value;
@@ -114,21 +88,14 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
     jumpToProcessFilterFunction();
   };
   
-  function filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    return array.filter(item => {
-      // validates all filter criteria
-      return filterKeys.every(key => {
-        // ignores non-function predicates
-        if (typeof filters[key] !== 'function') return true;
-        return filters[key](item[key]);
-      });
-    });
+  const handleClearFilter = ()=>{
+    setMainState({...mainState, productData:mainState.storeOriginalProductData,filterState:{
+      category:[],
+        price:"",
+        rating:""
+    }})
   }
-  
-  
-  const filterData = filterArray(mainState.productData,mainState.filterState)
-  console.log("->>>>>>>>>>>>>>>>",filterData);
+
   console.log("After",mainState.filterState);
   return (
     <>
@@ -159,13 +126,13 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
           <Stack spacing={3} sx={{ p: 3 }}>
             <div>
               <Typography variant="subtitle1" gutterBottom>
-                Gender
+              Category
               </Typography>
               <FormGroup>
-                {FILTER_GENDER_OPTIONS.map((item) => (
+                {FILTER_CATEGORY_OPTIONS.map((item) => (
                   <FormControlLabel
                     key={item}
-                    control={<Checkbox value={item} onChange={(event) => handleChange(event, 'Gender')} />}
+                    control={<Checkbox value={item} checked={mainState.filterState.category.includes(item.toLowerCase())} onChange={(event) => handleChange(event, 'Category')} />}
                     label={item}
                   />
                 ))}
@@ -174,47 +141,34 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
 
             <div>
               <Typography variant="subtitle1" gutterBottom>
-                Category
+              Price
               </Typography>
               <RadioGroup>
-                {FILTER_CATEGORY_OPTIONS.map((item) => (
+                {FILTER_PRICE_OPTIONS.map((item) => (
                   <FormControlLabel
                     key={item}
-                    value={item}
-                    control={<Radio value={item} onChange={(event) => handleChange(event, 'Category')} />}
+                    value={mainState.filterState.price}  
+                    control={<Radio value={item} checked={mainState.filterState.price===item} onChange={(event) => handleChange(event, 'Price')} />}
                     label={item}
                   />
                 ))}
               </RadioGroup>
             </div>
-
-            <div>
-              <Typography variant="subtitle1" gutterBottom>
-                Price
-              </Typography>
-              <Slider
-                getAriaLabel={() => 'Minimum distance shift'}
-                value={value2}
-                onChange={handleChange2}
-                valueLabelDisplay="auto"
-               // getAriaValueText={valuetext}
-               max={20000}
-               min={1000}
-                disableSwap
-               />
-            </div>
-
             <div>
               <Typography variant="subtitle1" gutterBottom>
                 Rating
               </Typography>
-              <Rating
-                name="half-rating"
+              <Slider
+                aria-label="Temperature"
+                defaultValue={0.5}
+                valueLabelDisplay="auto"
+                step={0.5}
                 value={mainState.filterState.rating}
-                precision={0.5}
-                size="large"
+                marks
+                min={1}
+                max={5}
                 onChange={(event) => handleChange(event, 'Rating')}
-              />
+                />
             </div>
           </Stack>
         </Scrollbar>
@@ -226,6 +180,7 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
             type="submit"
             color="inherit"
             variant="outlined"
+            onClick={()=>handleClearFilter()}
             startIcon={<Iconify icon="ic:round-clear-all" />}
           >
             Clear All

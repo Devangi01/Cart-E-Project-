@@ -96,8 +96,8 @@ const handleIconClick = (id,iconName)=>{
                       <Radio
                         disableRipple
                         color="default"
-                        icon={<Rating readOnly value={rating} />}
-                        checkedIcon={<Rating readOnly value={rating} />}
+                        icon={<Rating name="half-rating" precision={0.5} readOnly value={rating} />}
+                        checkedIcon={<Rating name="half-rating" precision={0.5} readOnly value={rating} />}
                         sx={{
                           '&:hover': { bgcolor: 'transparent' },
                         }}

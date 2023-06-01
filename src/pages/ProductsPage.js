@@ -72,7 +72,7 @@ const {mainState, setMainState} = useContext(MainContext)
               onOpenFilter={handleOpenFilter}
               onCloseFilter={handleCloseFilter}
             />
-            <ProductSort />
+            
           </Stack>
         </Stack>
 
