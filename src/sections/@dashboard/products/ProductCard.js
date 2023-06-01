@@ -66,7 +66,7 @@ const handleIconClick = (id,iconName)=>{
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover">
+        <Link color="inherit" underline="hover" href={`singleProduct/${_id}`}>
           <Typography variant="subtitle2" style={{cursor:"pointer"}}  noWrap>
             {title}
           </Typography>
