@@ -1,22 +1,15 @@
 import PropTypes from 'prop-types';
 import { useState, useContext } from 'react';
-
-// @mui
 import { Box, Card, Link, Typography, Stack, Radio, FormControlLabel, Rating } from '@mui/material';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { styled } from '@mui/material/styles';
-// utils
 import { fCurrency } from '../../../utils/formatNumber';
-// components
 import { MainContext } from '../../../context/MainContext';
-
 import Label from '../../../components/label';
 import { ColorPreview } from '../../../components/color-utils';
-
-// ----------------------------------------------------------------------
 
 const StyledProductImg = styled('img')({
   top: 0,
@@ -26,32 +19,24 @@ const StyledProductImg = styled('img')({
   position: 'absolute',
 });
 
-// ----------------------------------------------------------------------
-
 ShopProductCard.propTypes = {
   product: PropTypes.object,
 };
 
-
-
-
 export default function ShopProductCard({ product }) {
   const { title, price, category, img, rating, _id } = product;
+  const { mainState, setMainState } = useContext(MainContext);
 
   const [mainProductCardState, setMainProductCardState] = useState({
     wishlistIconFlag: true,
-    addToCartIconFlag: true,
+    addToCartIconFlag: true,  
   });
 
-  const { mainState, setMainState } = useContext(MainContext);
-
-
-  let isProductInWishlist ="";
+  const wishlist = mainState.wishlist;
+  const isProductInWishlist = wishlist.some((product) => product.id === _id);
 
   const handleIconClick = () => {
-    const wishlist = mainState.wishlist;
-     isProductInWishlist = wishlist.some((product) => product.id === _id);
-  
+
     if (isProductInWishlist) {
       const updatedWishlist = wishlist.filter((product) => product.id !== _id);
       setMainState({ ...mainState, wishlist: updatedWishlist });
@@ -60,9 +45,6 @@ export default function ShopProductCard({ product }) {
       setMainState({ ...mainState, wishlist: updatedWishlist });
     }
   };
-    console.log(mainState)
-  
-
 
   return (
     <Card>
@@ -97,25 +79,23 @@ export default function ShopProductCard({ product }) {
 
           <Typography>
             <Stack direction="row" spacing={2}>
-            {isProductInWishlist ? (
+              {isProductInWishlist ? (
                 <FavoriteIcon onClick={handleIconClick} style={{ cursor: 'pointer', color: '#ed3939' }} />
               ) : (
                 <FavoriteBorderIcon onClick={handleIconClick} style={{ cursor: 'pointer' }} />
               )}
               {mainProductCardState.addToCartIconFlag ? (
-                <AddShoppingCartOutlinedIcon
-                  onClick={() => handleIconClick(_id, 'addToCartIconFlag')}
-                  style={{ cursor: 'pointer' }}
-                />
+                <AddShoppingCartOutlinedIcon onClick={handleIconClick} style={{ cursor: 'pointer' }} />
               ) : (
                 <ShoppingCartCheckoutIcon
-                  onClick={() => handleIconClick(_id, 'addToCartIconFlag')}
+                  onClick={handleIconClick}
                   style={{ cursor: 'pointer', color: 'darkblue' }}
                 />
               )}
             </Stack>
           </Typography>
         </Stack>
+
         <Stack>
           <FormControlLabel
             key={rating}

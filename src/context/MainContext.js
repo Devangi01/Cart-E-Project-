@@ -13,6 +13,6 @@ export const MainProvider = ({ children }) => {
     storeOriginalProductData: [],
     wishlist: [],
   });
-
+console.log(mainState.wishlist)
   return <MainContext.Provider value={{ mainState, setMainState }}>{children}</MainContext.Provider>;
 };
