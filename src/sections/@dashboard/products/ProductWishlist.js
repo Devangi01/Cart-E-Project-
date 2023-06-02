@@ -21,3 +21,4 @@ export default function ProductWishlist({ products, ...other }) {
     </Grid>
   );
 }
+

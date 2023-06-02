@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
 // @mui
 import { Box, Card, Link, Typography, Stack, Radio, FormControlLabel, Rating } from '@mui/material';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
@@ -10,10 +11,10 @@ import { styled } from '@mui/material/styles';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 // components
+import { MainContext } from '../../../context/MainContext';
+
 import Label from '../../../components/label';
 import { ColorPreview } from '../../../components/color-utils';
-
-
 
 // ----------------------------------------------------------------------
 
@@ -26,28 +27,47 @@ const StyledProductImg = styled('img')({
 });
 
 // ----------------------------------------------------------------------
-  
+
 ShopProductCard.propTypes = {
   product: PropTypes.object,
 };
 
+
+
+
 export default function ShopProductCard({ product }) {
-  const { title , price, category, img, rating ,_id} = product;
- 
+  const { title, price, category, img, rating, _id } = product;
+
   const [mainProductCardState, setMainProductCardState] = useState({
-        wishlistIconFlag:true,
-        addToCartIconFlag:true
+    wishlistIconFlag: true,
+    addToCartIconFlag: true,
   });
 
-const handleIconClick = (id,iconName)=>{
-  setMainProductCardState({...mainProductCardState,[iconName]:!mainProductCardState[iconName]})
-  console.log(id+iconName);
-}
+  const { mainState, setMainState } = useContext(MainContext);
+
+
+  let isProductInWishlist ="";
+
+  const handleIconClick = () => {
+    const wishlist = mainState.wishlist;
+     isProductInWishlist = wishlist.some((product) => product.id === _id);
+  
+    if (isProductInWishlist) {
+      const updatedWishlist = wishlist.filter((product) => product.id !== _id);
+      setMainState({ ...mainState, wishlist: updatedWishlist });
+    } else {
+      const updatedWishlist = [...wishlist, { id: _id, title, price, category, img, rating }];
+      setMainState({ ...mainState, wishlist: updatedWishlist });
+    }
+  };
+    console.log(mainState)
+  
+
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-      {category && (
+        {category && (
           <Label
             variant="filled"
             color={(category === 'shoes' && 'error') || 'info'}
@@ -67,48 +87,56 @@ const handleIconClick = (id,iconName)=>{
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link color="inherit" underline="hover" href={`singleProduct/${_id}`}>
-          <Typography variant="subtitle2" style={{cursor:"pointer"}}  noWrap>
+          <Typography variant="subtitle2" style={{ cursor: 'pointer' }} noWrap>
             {title}
           </Typography>
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-      
-          <Typography variant="subtitle1">
-            {fCurrency(price)}
-          </Typography>
+          <Typography variant="subtitle1">{fCurrency(price)}</Typography>
 
-
-          <Typography >
-
-          <Stack direction="row" spacing={2}>
-         {mainProductCardState.wishlistIconFlag ?  <FavoriteBorderIcon  onClick={() => handleIconClick(_id,"wishlistIconFlag") } style={{cursor:"pointer"}}/> :  <FavoriteIcon  onClick={() => handleIconClick(_id,"wishlistIconFlag")} style={{cursor:"pointer",color:"#ed3939"}}/>}
-         {mainProductCardState.addToCartIconFlag ?  <AddShoppingCartOutlinedIcon onClick={() => handleIconClick(_id,"addToCartIconFlag")} style={{cursor:"pointer"}}/> :  <ShoppingCartCheckoutIcon onClick={() => handleIconClick(_id,"addToCartIconFlag")} style={{cursor:"pointer",color:"darkblue"}}/>}
-         
-          </Stack>           
+          <Typography>
+            <Stack direction="row" spacing={2}>
+            {isProductInWishlist ? (
+                <FavoriteIcon onClick={handleIconClick} style={{ cursor: 'pointer', color: '#ed3939' }} />
+              ) : (
+                <FavoriteBorderIcon onClick={handleIconClick} style={{ cursor: 'pointer' }} />
+              )}
+              {mainProductCardState.addToCartIconFlag ? (
+                <AddShoppingCartOutlinedIcon
+                  onClick={() => handleIconClick(_id, 'addToCartIconFlag')}
+                  style={{ cursor: 'pointer' }}
+                />
+              ) : (
+                <ShoppingCartCheckoutIcon
+                  onClick={() => handleIconClick(_id, 'addToCartIconFlag')}
+                  style={{ cursor: 'pointer', color: 'darkblue' }}
+                />
+              )}
+            </Stack>
           </Typography>
         </Stack>
         <Stack>
-        <FormControlLabel
-                    key={rating}
-                    value={rating}
-                    control={
-                      <Radio
-                        disableRipple
-                        color="default"
-                        icon={<Rating name="half-rating" precision={0.5} readOnly value={rating} />}
-                        checkedIcon={<Rating name="half-rating" precision={0.5} readOnly value={rating} />}
-                        sx={{
-                          '&:hover': { bgcolor: 'transparent' },
-                        }}
-                      />
-                    }
-                    sx={{
-                      my: 0.5,
-                      borderRadius: 1,
-                      '&:hover': { opacity: 0.48 },
-                    }}
-                  />
+          <FormControlLabel
+            key={rating}
+            value={rating}
+            control={
+              <Radio
+                disableRipple
+                color="default"
+                icon={<Rating name="half-rating" precision={0.5} readOnly value={rating} />}
+                checkedIcon={<Rating name="half-rating" precision={0.5} readOnly value={rating} />}
+                sx={{
+                  '&:hover': { bgcolor: 'transparent' },
+                }}
+              />
+            }
+            sx={{
+              my: 0.5,
+              borderRadius: 1,
+              '&:hover': { opacity: 0.48 },
+            }}
+          />
         </Stack>
       </Stack>
     </Card>

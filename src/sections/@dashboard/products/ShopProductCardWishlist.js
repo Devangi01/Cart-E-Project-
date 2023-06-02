@@ -106,7 +106,7 @@ const handleIconClick = (id,iconName)=>{
         <Typography >
 
 <Stack direction="row" spacing={2}>
-{mainProductCardState.wishlistIconFlag ?  <DeleteForeverIcon  onClick={() => handleIconClick(_id,"wishlistIconFlag") } style={{cursor:"pointer"}}/> :  <FavoriteIcon  onClick={() => handleIconClick(_id,"wishlistIconFlag")} style={{cursor:"pointer",color:"#ed3939"}}/>}
+{mainProductCardState.wishlistIconFlag ?  <DeleteForeverIcon  onClick={() => handleIconClick(_id,"wishlistIconFlag") } style={{cursor:"pointer"}}/> :  <DeleteForeverIcon  onClick={() => handleIconClick(_id,"wishlistIconFlag")} style={{cursor:"pointer",color:"#ed3939"}}/>}
 {mainProductCardState.addToCartIconFlag ?  <AddShoppingCartOutlinedIcon onClick={() => handleIconClick(_id,"addToCartIconFlag")} style={{cursor:"pointer"}}/> :  <ShoppingCartCheckoutIcon onClick={() => handleIconClick(_id,"addToCartIconFlag")} style={{cursor:"pointer",color:"darkblue"}}/>}
 </Stack>           
 </Typography> 
