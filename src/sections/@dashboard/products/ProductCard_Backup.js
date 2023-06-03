@@ -26,36 +26,56 @@ ShopProductCard.propTypes = {
 export default function ShopProductCard({ product }) {
   const { title, price, category, img, rating, _id } = product;
   const { mainState, setMainState } = useContext(MainContext);
+  const [isInList,setIsInList] = useState({
+    wishlist:true,
+    cartlist:true
+  })
+  // const [mainProductCardState, setMainProductCardState] = useState({
+  //   addToCartIconFlag: true,
+  // });
 
-  const [mainProductCardState, setMainProductCardState] = useState({
-    addToCartIconFlag: true,
-  });
+  // const wishlist = mainState.wishlist;
+  // const cartlist = mainState.cartlist;
+  // const isProductInWishlist = wishlist.some((product) => product.id === _id);
+  // const isProductCartlist = mainState.cartlist.some((product) => product.id === _id);
 
-  const wishlist = mainState.wishlist;
-  const cartlist = mainState.cartlist;
-  const isProductInWishlist = wishlist.some((product) => product.id === _id);
-  const isProductCartlist = cartlist.some((product) => product.id === _id);
+  // const handleIconClick = () => {
+  //   if (isProductInWishlist) {
+  //     const updatedWishlist = wishlist.filter((product) => product.id !== _id);
+  //     setMainState({ ...mainState, wishlist: updatedWishlist });
+  //   } else {
+  //     const updatedWishlist = [...wishlist, { id: _id, title, price, category, img, rating }];
+  //     setMainState({ ...mainState, wishlist: updatedWishlist });
+  //   }
+  // };
 
-  const handleIconClick = () => {
-    if (isProductInWishlist) {
-      const updatedWishlist = wishlist.filter((product) => product.id !== _id);
-      setMainState({ ...mainState, wishlist: updatedWishlist });
-    } else {
-      const updatedWishlist = [...wishlist, { id: _id, title, price, category, img, rating }];
-      setMainState({ ...mainState, wishlist: updatedWishlist });
-    }
-  };
+  // const handleCartClick = () => {
+  //   if (isProductCartlist) {
+  //     const updatedCartlist =  cartlist.filter((product) => product.id !== _id);
+  //     setMainState({ ...mainState, cartlist: updatedCartlist });
+  //   } else {
+  //     const updatedCartlist = [...cartlist, { id: _id, title, price, category, img, rating }];
+  //     setMainState({ ...mainState, cartlist: updatedCartlist });
+  //   }
+  //   setMainProductCardState({...mainProductCardState, addToCartIconFlag: !mainProductCardState.addToCartIconFlag });
+  // };
 
-  const handleCartClick = () => {
-    if (isProductCartlist) {
-      const updatedCartlist =  cartlist.filter((product) => product.id !== _id);
-      setMainState({ ...mainState, cart: updatedCartlist });
-    } else {
-      const updatedCartlist = [...cartlist, { id: _id, title, price, category, img, rating }];
-      setMainState({ ...mainState, cartlist: updatedCartlist });
-    }
-    setMainProductCardState({...mainProductCardState, addToCartIconFlag: !mainProductCardState.addToCartIconFlag });
-  };
+
+const handleWishlistAndCartIconClick = (name)=>{
+  const data = mainState[name];
+  const checkIsInList =  data.some((product) => product.id === _id);
+  setIsInList({...isInList,[name]:checkIsInList})
+  if(checkIsInList){
+    const updateList =  data.filter((product)=>product.id !== _id);
+    setMainState({...mainState,[name]:updateList})
+  }else{
+    const updatedCartlist = [...mainState[name], { id: _id, title, price, category, img, rating }];
+    setMainState({...mainState,[name]:updatedCartlist})
+  }
+  
+}
+
+  console.log(mainState)
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -88,7 +108,7 @@ export default function ShopProductCard({ product }) {
           <Typography variant="subtitle1">{fCurrency(price)}</Typography>
 
           <Typography>
-            <Stack direction="row" spacing={2}>
+            {/* <Stack direction="row" spacing={2}>
               {isProductInWishlist ? (
                 <FavoriteIcon onClick={handleIconClick} style={{ cursor: 'pointer', color: '#ed3939' }} />
               ) : (
@@ -101,7 +121,26 @@ export default function ShopProductCard({ product }) {
                   onClick={() => handleCartClick()}
                   style={{ cursor: 'pointer', color: 'darkblue' }}
                 />
-              )}  
+              )}
+            </Stack>
+          </Typography>
+        </Stack> */}
+
+        <Stack direction="row" spacing={2}>
+              {isInList.wishlist ? (
+                
+                <FavoriteBorderIcon  onClick={() => handleWishlistAndCartIconClick("wishlist")} style={{ cursor: 'pointer' }} />
+              ) : (
+                <FavoriteIcon  onClick={() => handleWishlistAndCartIconClick("wishlist")} style={{ cursor: 'pointer', color: '#ed3939' }} />
+              )}
+              {isInList.cartlist ? (
+                <AddShoppingCartOutlinedIcon onClick={() => handleWishlistAndCartIconClick("cartlist")} style={{ cursor: 'pointer' }} />
+              ) : (
+                <ShoppingCartCheckoutIcon
+                  onClick={() => handleWishlistAndCartIconClick("cartlist")}
+                  style={{ cursor: 'pointer', color: 'darkblue' }}
+                />
+              )}
             </Stack>
           </Typography>
         </Stack>

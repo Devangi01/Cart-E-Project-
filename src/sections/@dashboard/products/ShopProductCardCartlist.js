@@ -16,19 +16,19 @@ const StyledProductImg = styled('img')({
   position: 'absolute',
 });
 
-ShopProductCardWishlist.propTypes = {
+ShopProductCardCartlist.propTypes = {
   product: PropTypes.object,
 };
 
-export default function ShopProductCardWishlist({ product }) {
+export default function ShopProductCardCartlist({ product }) {
   const { title, price, category, img, rating, _id } = product;
   const { mainState, setMainState } = useContext(MainContext);
 
  
   const handleIconClick = () => {
-    const updatedWishlist = mainState.wishlist.filter((data) => data.id !== product.id);
-    setMainState({ ...mainState, wishlist: updatedWishlist });
-    console.log("dddddd",updatedWishlist)
+    const updatedCartlist = mainState.cartlist.filter((data) => data.id !== product.id);
+    setMainState({ ...mainState, cartlist: updatedCartlist });
+    console.log("dddddd",updatedCartlist)
   };
 
 
@@ -54,8 +54,8 @@ export default function ShopProductCardWishlist({ product }) {
     )}
     <StyledProductImg alt={title} src={img} />
   </Box>
-
-  <Stack spacing={2} sx={{ p: 3 }}>
+  
+  <Stack direction="row" spacing={2} sx={{ p: 3 }}>
     <Link color="inherit" underline="hover" href={`singleProduct/${_id}`}>
       <Typography variant="subtitle2" style={{ cursor: 'pointer' }} noWrap>
         {title}

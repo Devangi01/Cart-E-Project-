@@ -26,42 +26,10 @@ const SORT_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function BlogPage() {
+export default function WishlistPage() {
   const {mainState, setMainState} = useContext(MainContext)
 
-  const encodedToken = localStorage.getItem("token");
-  const [openFilter, setOpenFilter] = useState(false);
-
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
-
-  
-  useEffect(()=> {
-    const fecthProduct = async () => {
-      try {
-        const response = await axios.get(`/api/products`, {
-          headers: {
-            authorization: encodedToken, // passing token as an authorization header
-          },
-
-        });
-
-        setMainState({...mainState,productData:response.data.products,storeOriginalProductData:response.data.products})
-        
-  console.log(response.data.products)
-      } catch (error) {
-        console.log(error);
-      }
-
-    }
-    fecthProduct();
-  },[])
-
+  console.log("BLog",mainState.wishlist)
   return (
     <>
       <Helmet>
@@ -72,8 +40,12 @@ export default function BlogPage() {
       <Typography variant="h4" sx={{ mb: 5 }}>
          Wishlist Management
         </Typography>
-
-        <ProductWishlist products={mainState.productData} />
+{mainState.wishlist.length > 0 ? (<ProductWishlist products={mainState.wishlist} />) : (
+   <Typography align="center" variant="h6" sx={{ mb: 5 }}>
+  No more item in wishlist page
+  </Typography>
+)}
+        
     
       </Container>
     </>
