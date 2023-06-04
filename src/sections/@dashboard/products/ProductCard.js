@@ -49,12 +49,12 @@ export default function ShopProductCard({ product }) {
   const handleCartClick = () => {
     if (isProductCartlist) {
       const updatedCartlist =  cartlist.filter((product) => product.id !== _id);
-      setMainState({ ...mainState, cart: updatedCartlist });
+      setMainState({ ...mainState, cartlist: updatedCartlist });
     } else {
       const updatedCartlist = [...cartlist, { id: _id, title, price, category, img, rating }];
       setMainState({ ...mainState, cartlist: updatedCartlist });
     }
-    setMainProductCardState({...mainProductCardState, addToCartIconFlag: !mainProductCardState.addToCartIconFlag });
+
   };
   return (
     <Card>
@@ -94,12 +94,12 @@ export default function ShopProductCard({ product }) {
               ) : (
                 <FavoriteBorderIcon onClick={handleIconClick} style={{ cursor: 'pointer' }} />
               )}
-              {mainProductCardState.addToCartIconFlag ? (
-                <AddShoppingCartOutlinedIcon onClick={() => handleCartClick()} style={{ cursor: 'pointer' }} />
+              {isProductCartlist ? (
+                <ShoppingCartCheckoutIcon onClick={() => handleCartClick()} style={{ cursor: 'pointer' , color: 'darkblue' }} />
               ) : (
-                <ShoppingCartCheckoutIcon
+                <AddShoppingCartOutlinedIcon 
                   onClick={() => handleCartClick()}
-                  style={{ cursor: 'pointer', color: 'darkblue' }}
+                  style={{ cursor: 'pointer' }}
                 />
               )}  
             </Stack>
