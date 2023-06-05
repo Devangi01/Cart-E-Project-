@@ -48,22 +48,58 @@ export default function Cartlist() {
             No more item in Cart page
           </Typography>
         )}
-         <Box sx={{
-        width: 300,
-        height: 300,
-        backgroundColor:"gray"
-     
-      }}>
-          <Stack direction="row">
-          <Typography width="100%" variant="h6" align="center">
-            Price Details  <Divider style={{height:"200px"}}/>
+        <Box sx={{
+  width: 400,
+  height: 300,
+  backgroundColor: "gray",
+  borderRadius: 4,
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+  p: 2,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  overflowY: 'scroll' // Add this to enable scrolling if the content exceeds the container height
+}}>
+  <Typography variant="h6" align="center">
+    Price Details
+  </Typography>
+  <Divider />
+  <Stack spacing={1} sx={{ mt: 2 }}>
+    {/* Cart Items */}
+    {/* {mainState.cartlist.map((product) => (
+      <Stack key={product.id} direction="row" justifyContent="space-between">
+        <Typography variant="body2">{product.title}</Typography>
+        <Typography variant="body2">{product.price}</Typography>
+      </Stack>
+    ))}
+    <Divider /> */}
+    {/* Subtotal */}
+    <Stack direction="row" justifyContent="space-between">
+      <Typography variant="body2">Subtotal:</Typography>
+      <Typography variant="body2">$100.00</Typography>
+    </Stack>
+    {/* Shipping */}
+    <Stack direction="row" justifyContent="space-between">
+      <Typography variant="body2">Price:</Typography>
+      <Typography variant="body2">$10.00</Typography>
+    </Stack>
+    {/* Discount */}
+    <Stack direction="row" justifyContent="space-between">
+      <Typography variant="body2">Quantity:</Typography>
+      <Typography variant="body2">-$20.00</Typography>
+    </Stack>
+    <Divider />
+    {/* Total */}
+    <Stack direction="row" justifyContent="space-between">
+      <Typography variant="subtitle1">Final total:</Typography>
+      <Typography variant="subtitle1">$90.00</Typography>
+    </Stack>
+  </Stack>
+</Box>
 
 
-          </Typography>
-          
 
-          </Stack>
-         </Box>
+
         </Stack>
       </Container>
     </>
