@@ -4,25 +4,38 @@ import { useContext, useEffect, useState } from 'react';
 // Adjust the file path accordingly
 
 // @mui
-import { Container, Stack, Typography,Box } from '@mui/material';
+import { Container, Stack, Typography,Box, Grid, Table } from '@mui/material';
 import Divider from '@mui/material/Divider';
 
+
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+// mock
+import PRODUCTS from '../_mock/products';
+
+// ----------------------------------------------------------------------
 import { MainContext } from '../context/MainContext';
 // components
 // import ProductWishlist from 'src/sections/@dashboard/products/ProductWishlist';
 import ProductWishlist from '../sections/@dashboard/products/ProductWishlist';
 import ProductCartlist from '../sections/@dashboard/products/ProductCartlist';
 
-// mock
-import PRODUCTS from '../_mock/products';
 
-// ----------------------------------------------------------------------
+
+
+
 
 const SORT_OPTIONS = [
   { value: 'latest', label: 'Latest' },
   { value: 'popular', label: 'Popular' },
   { value: 'oldest', label: 'Oldest' },
 ];
+
+
 
 // ----------------------------------------------------------------------
 
@@ -55,16 +68,12 @@ export default function Cartlist() {
   borderRadius: 4,
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
   p: 2,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  overflowY: 'scroll' // Add this to enable scrolling if the content exceeds the container height
 }}>
   <Typography variant="h6" align="center">
     Price Details
   </Typography>
-  <Divider />
-  <Stack spacing={1} sx={{ mt: 2 }}>
+    {/* <Divider sx={{ borderBottomWidth: 5 }} /> */}
+  <Stack spacing={1}>
     {/* Cart Items */}
     {/* {mainState.cartlist.map((product) => (
       <Stack key={product.id} direction="row" justifyContent="space-between">
@@ -73,28 +82,31 @@ export default function Cartlist() {
       </Stack>
     ))}
     <Divider /> */}
-    {/* Subtotal */}
-    <Stack direction="row" justifyContent="space-between">
-      <Typography variant="body2">Subtotal:</Typography>
-      <Typography variant="body2">$100.00</Typography>
-    </Stack>
-    {/* Shipping */}
-    <Stack direction="row" justifyContent="space-between">
-      <Typography variant="body2">Price:</Typography>
-      <Typography variant="body2">$10.00</Typography>
-    </Stack>
-    {/* Discount */}
-    <Stack direction="row" justifyContent="space-between">
-      <Typography variant="body2">Quantity:</Typography>
-      <Typography variant="body2">-$20.00</Typography>
-    </Stack>
-    <Divider />
-    {/* Total */}
-    <Stack direction="row" justifyContent="space-between">
-      <Typography variant="subtitle1">Final total:</Typography>
-      <Typography variant="subtitle1">$90.00</Typography>
-    </Stack>
-  </Stack>
+      </Stack>
+      <Box sx={{
+  width: 370,
+  height: 200,
+  backgroundColor: "Green",
+  borderRadius: 2,
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+  p: 2,
+}} >
+  <Stack
+        direction="row"
+        divider={<Divider orientation="vertical" flexItem />}
+        spacing={2}
+      >
+         <Typography variant="h6" align="center">
+    Price Details
+  </Typography> <Typography variant="h6" align="center">
+    Price Details
+  </Typography> <Typography variant="h6" align="center">
+    Price Details
+  </Typography>
+      </Stack>
+</Box>
+
+      
 </Box>
 
 
