@@ -1,28 +1,16 @@
-
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import { useContext, useEffect, useState } from 'react';
- // Adjust the file path accordingly
-
-
-// @mui
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography, CircularProgress } from '@mui/material';
 import { MainContext } from '../context/MainContext';
-// components
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
-// mock
 import PRODUCTS from '../_mock/products';
 
-
-// ----------------------------------------------------------------------
-
-
 export default function ProductsPage() {
-
-const {mainState, setMainState} = useContext(MainContext)
-
-  const encodedToken = localStorage.getItem("token");
+  const { mainState, setMainState } = useContext(MainContext);
+  const encodedToken = localStorage.getItem('token');
   const [openFilter, setOpenFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -32,52 +20,75 @@ const {mainState, setMainState} = useContext(MainContext)
     setOpenFilter(false);
   };
 
-  
-  useEffect(()=> {
-    const fecthProduct = async () => {
+  useEffect(() => {
+    const fetchProducts = async () => {
       try {
-        const response = await axios.get(`/api/products`, {
+        const response = await axios.get('/api/products', {
           headers: {
-            authorization: encodedToken, // passing token as an authorization header
+            authorization: encodedToken,
           },
-
         });
 
-        setMainState({...mainState,productData:response.data.products,storeOriginalProductData:response.data.products})
+        setMainState({
+          ...mainState,
+          productData: response.data.products,
+          storeOriginalProductData: response.data.products,
+        });
         
-  console.log(response.data.products)
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
+    };
 
-    }
-    fecthProduct();
-  },[])
+    fetchProducts();
+  }, []);
+
   return (
     <>
       <Helmet>
-        
-        <title> Dashboard: Products | Minimal UI </title>
+        <title>Dashboard: Products | Minimal UI</title>
       </Helmet>
 
-      <Container> 
+      <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Products
         </Typography>
 
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
+        <Stack
+          direction="row"
+          flexWrap="wrap-reverse"
+          alignItems="center"
+          justifyContent="flex-end"
+          sx={{ mb: 5 }}
+        >
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <ProductFilterSidebar
               openFilter={openFilter}
               onOpenFilter={handleOpenFilter}
               onCloseFilter={handleCloseFilter}
             />
-            
+            {/* Add other filter components here */}
           </Stack>
         </Stack>
 
-        <ProductList products={mainState.productData} />
-        <ProductCartWidget />
+        {isLoading ? (
+         <Stack
+         sx={{
+           height: '100vh',
+           alignItems: 'center',
+           justifyContent: 'center',
+         }}
+       >
+        <CircularProgress size={80} />
+       </Stack>
+     ): (
+          <>
+            <ProductSort />
+            <ProductList products={mainState.productData} />
+            <ProductCartWidget />
+          </>
+        )}
       </Container>
     </>
   );
