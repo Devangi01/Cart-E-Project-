@@ -1,11 +1,15 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useContext , useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+
+
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
+import { MainContext } from '../../../context/MainContext';
 import Iconify from '../../../components/iconify';
+
 
 
 
@@ -13,18 +17,21 @@ import Iconify from '../../../components/iconify';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const navigate = useNavigate();
 
-  const [mainState, setMainState] = useState({
+  const {mainState, setMainState} = useContext(MainContext)
+  const navigate = useNavigate();
+ 
+  const [loginState, setLoginState] = useState({
     email: "",
     password: "",
     showPassword: false,
+
   })
  
 
   const handleChange = (event) => {
     
-   setMainState({...mainState, [event.target.name]: event.target.value})
+   setLoginState({...loginState, [event.target.name]: event.target.value})
   }
   const encodedToken = localStorage.getItem("token");
   console.log(encodedToken)
@@ -32,8 +39,8 @@ export default function LoginForm() {
     
     try {
       const response = await axios.post(`/api/auth/login`, {
-        email: mainState.email,
-        password: mainState.password,
+        email: loginState.email,
+        password: loginState.password,
         headers: {
           authorization: encodedToken, // passing token as an authorization header
         },
@@ -49,7 +56,8 @@ export default function LoginForm() {
       if(response.status === 200){
         alert(response.status);
         localStorage.setItem("token", response.data.encodedToken);
-        navigate('/dashboard', { replace: true });
+        setMainState({ ...mainState, isLoggedIn: true }); // Update isLoggedIn state in MainContext
+           navigate('/dashboard', { replace: true });
   
       }
      
@@ -59,23 +67,28 @@ export default function LoginForm() {
     }
 
   };
-
+  useEffect(() => {
+    if (mainState.isLoggedIn) {
+      navigate('/cart'); // Navigating to the cart page if logged in
+    }
+  }, [mainState.isLoggedIn, navigate]);
+console.log(mainState.isLoggedIn)
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" onChange={(event)=> handleChange(event)} value={mainState.email}/>
+        <TextField name="email" label="Email address" onChange={(event)=> handleChange(event)} value={loginState.email}/>
 
         <TextField
           name="password"
           label="Password"
-          value= {mainState.password}
+          value= {loginState.password}
           onChange={(event)=> handleChange(event)}
-          type={mainState.showPassword ? 'text' : 'password'}
+          type={loginState.showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setMainState({...mainState, showPassword:!mainState.showPassword})} edge="end">
-                  <Iconify icon={mainState.showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                <IconButton onClick={() => setLoginState({...loginState, showPassword:!loginState.showPassword})} edge="end">
+                  <Iconify icon={loginState.showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                 </IconButton>
               </InputAdornment>
             ),

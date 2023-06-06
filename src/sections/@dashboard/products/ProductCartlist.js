@@ -12,7 +12,7 @@ ProductCartlist.propTypes = {
 
 export default function ProductCartlist({ products, ...other }) {
   return (
-    <Grid container spacing={3} {...other}>
+    <Grid container spacing={1} {...other}>
       {products.map((product) => (
         <Grid key={product.id} item xs={12} sm={22} md={12}>
           <ShopProductCardCartlist product={product} />

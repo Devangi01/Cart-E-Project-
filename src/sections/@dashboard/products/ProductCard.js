@@ -48,14 +48,16 @@ export default function ShopProductCard({ product }) {
 
   const handleCartClick = () => {
     if (isProductCartlist) {
-      const updatedCartlist =  cartlist.filter((product) => product.id !== _id);
+      const updatedCartlist = cartlist.filter((product) => product.id !== _id);
       setMainState({ ...mainState, cartlist: updatedCartlist });
     } else {
-      const updatedCartlist = [...cartlist, { id: _id, title, price, category, img, rating }];
+      const updatedCartlist = [...cartlist, { id: _id, title, price, category, img, rating, quantity: 1 }];
       setMainState({ ...mainState, cartlist: updatedCartlist });
     }
 
   };
+
+  console.log("FINAL", mainState)
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -95,13 +97,13 @@ export default function ShopProductCard({ product }) {
                 <FavoriteBorderIcon onClick={handleIconClick} style={{ cursor: 'pointer' }} />
               )}
               {isProductCartlist ? (
-                <ShoppingCartCheckoutIcon onClick={() => handleCartClick()} style={{ cursor: 'pointer' , color: 'darkblue' }} />
+                <ShoppingCartCheckoutIcon onClick={() => handleCartClick()} style={{ cursor: 'pointer', color: 'darkblue' }} />
               ) : (
-                <AddShoppingCartOutlinedIcon 
+                <AddShoppingCartOutlinedIcon
                   onClick={() => handleCartClick()}
                   style={{ cursor: 'pointer' }}
                 />
-              )}  
+              )}
             </Stack>
           </Typography>
         </Stack>
