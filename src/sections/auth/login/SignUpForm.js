@@ -29,9 +29,9 @@ export default function SignUpForm() {
       });
       console.log(response)
       // saving the encodedToken in the localStorage
-      alert(response.status)
+    
       if(response.status===201){
-    alert(response.status)
+   
         localStorage.setItem("token", response.data.encodedToken);
         navigate('/login', { replace: true });
       }
