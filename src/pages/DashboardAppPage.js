@@ -1,27 +1,26 @@
 import { Helmet } from 'react-helmet-async';
-import { faker } from '@faker-js/faker';
+import { styled } from '@mui/material/styles';
 // @mui
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 // components
-import Iconify from '../components/iconify';
+
 // sections
 import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
+
   AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
 } from '../sections/@dashboard/app';
 
 // ----------------------------------------------------------------------
-
+const StyledProductImg = styled('img')({
+  top: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  position: 'absolute',
+});
 export default function DashboardAppPage() {
-  const theme = useTheme();
+  // const theme = useTheme();
 
   return (
     <>
@@ -36,22 +35,24 @@ export default function DashboardAppPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+          <StyledProductImg alt="clothes" />
+            <AppWidgetSummary title="Clothes" total={714000}  />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
+            <AppWidgetSummary title="Shoes" total={1352831} color="info" icon={'ant-design:apple-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Item Orders" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
+            <AppWidgetSummary title="jewellery" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
           </Grid>
+          
 
-          <Grid item xs={12} sm={6} md={3}>
+          {/* <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Website Visits"
               subheader="(+43%) than last year"
@@ -90,8 +91,8 @@ export default function DashboardAppPage() {
               ]}
             />
           </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
+ */}
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
               title="Current Visits"
               chartData={[
@@ -211,7 +212,7 @@ export default function DashboardAppPage() {
                 { id: '5', label: 'Sprint Showcase' },
               ]}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </>

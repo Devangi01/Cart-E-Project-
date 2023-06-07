@@ -14,6 +14,10 @@
       wishlist: [],
       cartlist: [],
       isLoggedIn: false,
+      alertBox :{
+        text:"",
+        type:""
+      }
     });
 
    

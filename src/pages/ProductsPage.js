@@ -3,8 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import { useContext, useEffect, useState } from 'react';
 import { Container, Stack, Typography, CircularProgress } from '@mui/material';
 import { MainContext } from '../context/MainContext';
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
-import PRODUCTS from '../_mock/products';
+import { ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
+
 
 export default function ProductsPage() {
   const { mainState, setMainState } = useContext(MainContext);
@@ -36,6 +36,8 @@ export default function ProductsPage() {
         });
         
         setIsLoading(false);
+      
+      
       } catch (error) {
         console.log(error);
       }
@@ -84,7 +86,7 @@ export default function ProductsPage() {
        </Stack>
      ): (
           <>
-            <ProductSort />
+            {/* <ProductSort /> */}
             <ProductList products={mainState.productData} />
             <ProductCartWidget />
           </>

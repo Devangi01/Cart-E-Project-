@@ -39,20 +39,32 @@ export default function ShopProductCard({ product }) {
   const handleIconClick = () => {
     if (isProductInWishlist) {
       const updatedWishlist = wishlist.filter((product) => product.id !== _id);
-      setMainState({ ...mainState, wishlist: updatedWishlist });
+     const alertObject =  mainState.alertBox;
+     alertObject.text = title.concat(" removed from the wish list");
+     alertObject.type ="error";
+      setMainState({ ...mainState, wishlist: updatedWishlist, alertBox:alertObject });
     } else {
+      const alertObject =  mainState.alertBox;
+      alertObject.text = title.concat(" added to the wish list");
+      alertObject.type ="success";
       const updatedWishlist = [...wishlist, { id: _id, title, price, category, img, rating }];
-      setMainState({ ...mainState, wishlist: updatedWishlist });
+      setMainState({ ...mainState, wishlist: updatedWishlist,alertBox:alertObject });
     }
   };
 
   const handleCartClick = () => {
     if (isProductCartlist) {
+      const alertObject =  mainState.alertBox;
+      alertObject.text = title.concat(" removed from the cart list");
+      alertObject.type ="error";
       const updatedCartlist = cartlist.filter((product) => product.id !== _id);
-      setMainState({ ...mainState, cartlist: updatedCartlist });
+      setMainState({ ...mainState, cartlist: updatedCartlist,alertBox:alertObject });
     } else {
+      const alertObject =  mainState.alertBox;
+      alertObject.text = title.concat(" added to the cart list");
+      alertObject.type ="success";
       const updatedCartlist = [...cartlist, { id: _id, title, price, category, img, rating, quantity: 1 }];
-      setMainState({ ...mainState, cartlist: updatedCartlist });
+      setMainState({ ...mainState, cartlist: updatedCartlist,alertBox:alertObject });
     }
 
   };

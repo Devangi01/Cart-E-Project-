@@ -1,16 +1,20 @@
+import {useState, useEffect,useContext } from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton,Snackbar, Alert } from '@mui/material';
+// import MuiAlert from '@mui/material/Alert';
 // utils
+import { MainContext } from '../../../context/MainContext';
 import { bgBlur } from '../../../utils/cssStyles';
 // components
 import Iconify from '../../../components/iconify';
 //
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
-import NotificationsPopover from './NotificationsPopover';
+
+
+
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +23,8 @@ const NAV_WIDTH = 280;
 const HEADER_MOBILE = 64;
 
 const HEADER_DESKTOP = 92;
+
+
 
 const StyledRoot = styled(AppBar)(({ theme }) => ({
   ...bgBlur({ color: theme.palette.background.default }),
@@ -42,7 +48,26 @@ Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
 
+
+
 export default function Header({ onOpenNav }) {
+  const [open, setOpen] = useState(false)
+  const {mainState} = useContext(MainContext)
+ 
+  useEffect(() => {
+  
+      setOpen(true);
+    
+  }, [mainState.alertBox]);
+
+  // const handleClose = (event, reason) => {
+  //   if (reason === 'clickaway') {
+  //     return;
+  //   }
+
+  //   setOpen(false);
+  // };
+  console.log("Header",mainState.alertBox)
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -59,7 +84,11 @@ export default function Header({ onOpenNav }) {
 
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
-
+       <Snackbar open={open}  autoHideDuration={6000} >
+      <Alert  severity={mainState.alertBox.type} sx={{ width: '100%' }}>
+        {mainState.alertBox.text}
+      </Alert>
+    </Snackbar>
         <Stack
           direction="row"
           alignItems="center"
@@ -68,10 +97,14 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
-          <LanguagePopover />
-          <NotificationsPopover />
+        
+          {/* <LanguagePopover /> */}
+          {/* <NotificationsPopover /> */}
+
+
           <AccountPopover />
         </Stack>
+        
       </StyledToolbar>
     </StyledRoot>
   );

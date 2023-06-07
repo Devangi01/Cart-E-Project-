@@ -26,8 +26,11 @@ export default function ShopProductCardWishlist({ product }) {
 
  
   const handleIconClick = () => {
+    const alertObject =  mainState.alertBox;
+    alertObject.text = title.concat(" removed from the wish list");
+    alertObject.type ="error";
     const updatedWishlist = mainState.wishlist.filter((data) => data.id !== product.id);
-    setMainState({ ...mainState, wishlist: updatedWishlist });
+    setMainState({ ...mainState, wishlist: updatedWishlist, alertBox: alertObject });
     console.log("dddddd",updatedWishlist)
   };
 
