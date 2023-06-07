@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
 
 import { Helmet } from 'react-helmet-async';
 // @mui
@@ -12,6 +12,8 @@ import Logo from '../components/logo';
 
 // sections
 import { LoginForm, SignUpForm } from '../sections/auth/login';
+
+import { MainContext } from '../context/MainContext';
 
 
 
@@ -51,9 +53,11 @@ const StyledContent = styled('div')(({ theme }) => ({
 const LoginPage = ()=> {
   const mdUp = useResponsive('up', 'md');
 
-  const [mainState, setMainState] = useState({
-    loginFalg :true
-  });
+  // const [mainState, setMainState] = useState({
+  //   loginFalg :true
+  // });
+
+  const {mainState, setMainState} = useContext(MainContext);
   const handleClick = ()=>{
     setMainState({
       ...mainState,loginFalg:!mainState.loginFalg

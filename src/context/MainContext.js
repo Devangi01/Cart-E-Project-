@@ -17,7 +17,8 @@
       alertBox :{
         text:"",
         type:""
-      }
+      },
+      loginFalg: true,
     });
 
    

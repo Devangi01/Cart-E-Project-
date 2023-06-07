@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 // @mui
@@ -7,12 +7,14 @@ import { LoadingButton } from '@mui/lab';
 
 // components
 import Iconify from '../../../components/iconify';
+
+import { MainContext } from '../../../context/MainContext';
 // ----------------------------------------------------------------------
 
 export default function SignUpForm() {
   const navigate = useNavigate();
 
-  const [mainState,setMainState] = useState({
+  const [signUpState,setsignUpState] = useState({
     showPassword : false,
     showConfirmPassword: false,
     email:"",
@@ -20,12 +22,13 @@ export default function SignUpForm() {
     confirmpassword:""
   })
 
+  const {mainState, setMainState} = useContext(MainContext)
   const handleClick = async () => {
     
     try {
       const response = await axios.post(`/api/auth/signup`, {
-        email: mainState.email,
-        password: mainState.password
+        email: signUpState.email,
+        password: signUpState.password
       });
       console.log(response)
       // saving the encodedToken in the localStorage
@@ -33,7 +36,9 @@ export default function SignUpForm() {
       if(response.status===201){
    
         localStorage.setItem("token", response.data.encodedToken);
+        setMainState({...mainState, loginFalg: true})
         navigate('/login', { replace: true });
+        
       }
       
     } catch (error) {
@@ -46,25 +51,25 @@ export default function SignUpForm() {
    
 
       const value = event.target.value;
-     setMainState({...mainState, [event.target.name]:value})
+     setsignUpState({...signUpState, [event.target.name]:value})
   }
 
   return (
     <>
       <Stack spacing={3} sx={{mb:2}}>
-        <TextField name="email" label="Email address" onChange={(event)=> handleChange(event)} value={mainState.email}/>
+        <TextField name="email" label="Email address" onChange={(event)=> handleChange(event)} value={signUpState.email}/>
 
         <TextField
           name="password"
           label="Password"
-          value={mainState.password}
-          type={mainState.showPassword ? 'text' : 'password'}
+          value={signUpState.password}
+          type={signUpState.showPassword ? 'text' : 'password'}
           onChange={(e)=> handleChange(e)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setMainState({...mainState,showPassword:!mainState.showPassword})} edge="end">
-                  <Iconify icon={mainState.showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                <IconButton onClick={() => setsignUpState({...signUpState,showPassword:!signUpState.showPassword})} edge="end">
+                  <Iconify icon={signUpState.showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                 </IconButton>
               </InputAdornment>
             ),
@@ -74,13 +79,13 @@ export default function SignUpForm() {
           name="confirmpassword"
           label="Confrim Password"
           onChange={(e)=> handleChange(e)}
-          value={mainState.confirmpassword}
-          type={mainState.showConfirmPassword ? 'text' : 'password'}
+          value={signUpState.confirmpassword}
+          type={signUpState.showConfirmPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setMainState({...mainState,showConfirmPassword:!mainState.showConfirmPassword})} edge="end">
-                  <Iconify icon={mainState.showConfirmPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                <IconButton onClick={() => setsignUpState({...signUpState,showConfirmPassword:!signUpState.showConfirmPassword})} edge="end">
+                  <Iconify icon={signUpState.showConfirmPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                 </IconButton>
               </InputAdornment>
             ),
