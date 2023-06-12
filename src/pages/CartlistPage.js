@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import { useContext, useEffect, useState } from 'react';
+import { v4 as uuid } from "uuid";
 // Adjust the file path accordingly
 
 // @mui
@@ -46,6 +47,7 @@ export default function Cartlist() {
 
   const [saveData, setsaveData] = useState([]);
   const [address, setAddress] = useState({
+    id: uuid(),
     firstName: '',
     lastName: '',
     addDetails: ''
@@ -70,7 +72,7 @@ export default function Cartlist() {
 
   }
   const handlePlaceOrderClick = () => {
-    if (saveData.length > 0) {
+    if (mainState.saveAddressData.length > 0) {
       alert("Your order is placed")
       setOpen(false);
     } else {
@@ -91,12 +93,39 @@ export default function Cartlist() {
   }, [mainState.cartlist]);
 
   const handleChange = (event) => {
-    setAddress({ ...address, [event.target.name]: event.target.value })
-  }
-  const saveAddress = () => {
-    setsaveData([...saveData, address]);
+    const addressObject = mainState.address;
+
+    setMainState({ ...mainState, address: { ...mainState.address, id: uuid(), [event.target.name]: event.target.value } })
 
   }
+  const saveAddress = () => {
+
+    setMainState({ ...mainState, saveAddressData: [...mainState.saveAddressData, mainState.address] })
+
+    //  setMainState({ ...mainState, address: { id: uuid(), firstName: '', lastName: '', addDetails: '' } })
+
+    // setsaveData([...saveData, address]);
+    // setAddress({
+    //   id: uuid(),
+    //   firstName: '',
+    //   lastName: '',
+    //   addDetails: ''
+    // })
+  }
+  console.log("Data******", mainState.saveAddressData);
+
+
+  const handleEditDeleteButton = (id, buttonType) => {
+    if (buttonType === "Edit") {
+      const tempData = mainState.saveAddressData.filter((data) => data.id === id);
+      console.log("tempData=======>>>>", tempData)
+      setMainState({ ...mainState, address: { id: tempData[0].id, firstName: tempData[0].firstName, lastName: tempData[0].lastName, addDetails: tempData[0].addDetails } })
+    } else {
+      const filterData = mainState.saveAddressData.filter((data) => data.id !== id);
+      setMainState({ ...mainState, saveAddressData: filterData });
+    }
+  }
+  console.log("After Save", address)
   return (
     <>
       <Helmet>
@@ -345,7 +374,7 @@ export default function Cartlist() {
                         name="radio-buttons-group"
                       >
                         {
-                          saveData.map((data, ind) => {
+                          mainState.saveAddressData.map((data, ind) => {
                             return (
 
 
@@ -381,12 +410,12 @@ export default function Cartlist() {
                                 </Box>
                                 <Stack direction="row" spacing={1} style={{ marginTop: "5px", marginRight: "12px", flexDirection: "row", justifyContent: "right" }}>
                                   <Stack >
-                                    <Button size="small" variant="outlined" color="primary" >
+                                    <Button size="small" variant="outlined" onClick={() => handleEditDeleteButton(data.id, "Edit")} color="primary" >
                                       <EditNoteIcon style={{ cursor: 'pointer', color: 'blue' }} />
                                     </Button>
                                   </Stack>
                                   <Stack>
-                                    <Button size="small" variant="outlined" color="error" >
+                                    <Button size="small" variant="outlined" onClick={() => handleEditDeleteButton(data.id, "Delete")} color="error" >
                                       <DeleteForeverIcon style={{ cursor: 'pointer', color: '#ed3939' }} />
                                     </Button>
                                   </Stack>
@@ -416,8 +445,8 @@ export default function Cartlist() {
                   </Typography>
                   <Stack spacing={2} direction="row">
 
-                    <TextField size="small" name="firstName" value={address.firstName} onChange={(event) => handleChange(event)} id="outlined-basic" label="First name" variant="outlined" />
-                    <TextField id="outlined-basic" value={address.lastname} name="lastName" size="small" label="Last name" onChange={(event) => handleChange(event)} variant="outlined" />
+                    <TextField size="small" name="firstName" value={mainState.address.firstName} onChange={(event) => handleChange(event)} id="outlined-basic" label="First name" variant="outlined" />
+                    <TextField id="outlined-basic" value={mainState.address.lastName} name="lastName" size="small" label="Last name" onChange={(event) => handleChange(event)} variant="outlined" />
 
                   </Stack>
                   <Stack sx={{ mt: 2 }}>
@@ -427,7 +456,7 @@ export default function Cartlist() {
                       rows={2}
                       maxRows={4}
                       name="addDetails"
-                      value={address.addDetails}
+                      value={mainState.address.addDetails}
                       onChange={(event) => handleChange(event)}
                     />
                   </Stack>

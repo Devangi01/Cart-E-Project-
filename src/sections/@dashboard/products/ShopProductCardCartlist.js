@@ -186,6 +186,8 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { useContext, useEffect, useState } from 'react';
 import { Box, Card, Link, Typography, Stack, Radio, FormControlLabel, Rating, IconButton, Alert } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { styled } from '@mui/material/styles';
 import { fCurrency } from '../../../utils/formatNumber';
@@ -206,10 +208,15 @@ ShopProductCardCartlist.propTypes = {
 };
 
 export default function ShopProductCardCartlist({ product }) {
+  console.log(product)
   const { title, price, category, img, rating, _id } = product;
   const { mainState, setMainState } = useContext(MainContext);
   const [quantity, setQuantity] = useState(1);
   const [showAlert, setShowAlert] = useState(false);
+
+
+  const wishlist = mainState.wishlist;
+  const isProductInWishlist = wishlist.some((productWishlist) => productWishlist.id === product.id);
 
   const handleIconClick = () => {
     setShowAlert(true);
@@ -226,6 +233,21 @@ export default function ShopProductCardCartlist({ product }) {
     setShowAlert(false);
   };
 
+  const handleWishListIcon = () => {
+    if (isProductInWishlist) {
+      const updatedWishlist = wishlist.filter((productWishlist) => productWishlist.id !== product.id);
+      const alertObject = mainState.alertBox;
+      alertObject.text = title.concat(" removed from the wish list");
+      alertObject.type = "error";
+      setMainState({ ...mainState, wishlist: updatedWishlist, alertBox: alertObject });
+    } else {
+      const alertObject = mainState.alertBox;
+      alertObject.text = title.concat(" added to the wish list");
+      alertObject.type = "success";
+      const updatedWishlist = [...wishlist, { id: product.id, title, price, category, img, rating }];
+      setMainState({ ...mainState, wishlist: updatedWishlist, alertBox: alertObject });
+    }
+  }
   useEffect(() => {
     const updateQuntityData = mainState.cartlist;
     for (let i = 0; i < updateQuntityData.length; i += 1) {
@@ -262,6 +284,7 @@ export default function ShopProductCardCartlist({ product }) {
           >
             <StyledProductImg alt={title} src={img} />
           </Box>
+
         </Stack>
         <Stack width="100%" justifyContent="space-between">
           <Stack direction="row" alignItems="center">
@@ -270,11 +293,29 @@ export default function ShopProductCardCartlist({ product }) {
                 {title}
               </Typography>
             </Link>
+
             <Box flexGrow={1} />
-            <Button variant="outlined" color="error" onClick={handleIconClick}>
-              <DeleteForeverIcon style={{ cursor: 'pointer', color: '#ed3939' }} />
-            </Button>
+            <Stack direction={"row"} alignItems="center" >
+
+              <Button variant="outlined" color="error" onClick={() => handleWishListIcon()}>
+                {
+                  isProductInWishlist ? (<FavoriteIcon style={{ cursor: 'pointer', color: '#ed3939' }} />) : (
+                    <FavoriteBorderIcon style={{ cursor: 'pointer' }} />
+                  )
+                }
+
+
+              </Button>
+              <Button variant="outlined" color="error" onClick={handleIconClick}>
+
+                <DeleteForeverIcon style={{ cursor: 'pointer', color: '#ed3939' }} />
+
+              </Button>
+            </Stack>
+
+
           </Stack>
+
           <Typography variant="subtitle1">{fCurrency(price)}</Typography>
           <Stack direction="row" alignItems="center">
             <FormControlLabel
@@ -307,7 +348,7 @@ export default function ShopProductCardCartlist({ product }) {
               </Button>
               <Button variant="outlined" onClick={handleIncrement}>
                 +
-              </Button>
+              </Button> 
             </Stack>
           </Stack>
         </Stack>

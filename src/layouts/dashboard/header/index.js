@@ -1,8 +1,10 @@
-import {useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton,Snackbar, Alert } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton, Snackbar } from '@mui/material';
+import MuiAlert, { AlertProps } from "@mui/material/Alert"
 // import MuiAlert from '@mui/material/Alert';
 // utils
 import { MainContext } from '../../../context/MainContext';
@@ -52,14 +54,26 @@ Header.propTypes = {
 
 export default function Header({ onOpenNav }) {
   const [open, setOpen] = useState(false)
-  const {mainState} = useContext(MainContext)
- 
-  useEffect(() => {
-  
-      setOpen(true);
-    
-  }, [mainState.alertBox]);
+  const { mainState } = useContext(MainContext)
 
+
+  const Alert = React.forwardRef((props, ref) => {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+  useEffect(() => {
+    if (mainState.alertBox.text !== '') {
+      setOpen(true);
+    }
+
+  }, [mainState.alertBox.text]);
+
+  const ref = React.createRef();
   // const handleClose = (event, reason) => {
   //   if (reason === 'clickaway') {
   //     return;
@@ -67,7 +81,7 @@ export default function Header({ onOpenNav }) {
 
   //   setOpen(false);
   // };
-  console.log("Header",mainState.alertBox)
+  console.log("Header Open State", open);
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -84,11 +98,17 @@ export default function Header({ onOpenNav }) {
 
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
-       <Snackbar open={open}  autoHideDuration={6000} >
-      <Alert  severity={mainState.alertBox.type} sx={{ width: '100%' }}>
-        {mainState.alertBox.text}
-      </Alert>
-    </Snackbar>
+        <Snackbar open={open} autoHideDuration={6000} >
+          <Alert severity={mainState.alertBox.type} sx={{ width: '100%' }}>
+            {mainState.alertBox.text}
+          </Alert>
+        </Snackbar>
+
+        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity={mainState.alertBox.type} sx={{ width: "100%" }}>
+            {mainState.alertBox.text}
+          </Alert>
+        </Snackbar>
         <Stack
           direction="row"
           alignItems="center"
@@ -97,14 +117,14 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
-        
+
           {/* <LanguagePopover /> */}
           {/* <NotificationsPopover /> */}
 
 
           <AccountPopover />
         </Stack>
-        
+
       </StyledToolbar>
     </StyledRoot>
   );
