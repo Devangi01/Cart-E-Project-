@@ -81,7 +81,7 @@ export default function Header({ onOpenNav }) {
 
   //   setOpen(false);
   // };
-  console.log("Header Open State", open);
+
   return (
     <StyledRoot>
       <StyledToolbar>

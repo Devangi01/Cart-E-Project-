@@ -52,16 +52,12 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
   const { mainState, setMainState } = useContext(MainContext);
   
   function jumpToProcessFilterFunction(){
-    console.log("calll");
     const finalFilterData =  filterRecord(mainState.storeOriginalProductData,mainState.filterState);
     setMainState({...mainState,productData:finalFilterData})
-     console.log("Final Filter Result", finalFilterData);
   }
 
 
   function filterRecord(inputArray,filterObject){
-    console.log(inputArray,filterObject)
-   // const filterData =  inputArray.filter((eachObject)=> eachObject.category.toLowerCase() === filterObject.category.toLowerCase() && (filterObject.gender.includes(eachObject.gender)) && (eachObject.price > filterObject.price[0] &&  eachObject.price < filterObject.price[1]) && eachObject.rating>=filterObject.rating);
    let filterData = [];
    if(filterObject.category.includes("all")){
     filterData =   inputArray.filter((eachObject)=> eachObject.rating >= filterObject.rating);
@@ -96,7 +92,6 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
     }})
   }
 
-  // console.log("After",mainState.filterState);
   return (
     <>
       <Button disableRipple color="inherit" endIcon={<Iconify icon="ic:round-filter-list" />} onClick={onOpenFilter}>

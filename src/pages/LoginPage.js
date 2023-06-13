@@ -66,17 +66,11 @@ const LoginPage = ()=> {
   return (
     <>
       <Helmet>
-        <title> {mainState.loginFalg ? "Login" : "Sign Up"} | Minimal UI </title>
+        <title> {mainState.loginFalg ? "Login" : "Sign Up"} |Cart-E Management </title>
       </Helmet>
 
       <StyledRoot>
-        <Logo
-          sx={{
-            position: 'fixed',
-            top: { xs: 16, sm: 24, md: 40 },
-            left: { xs: 16, sm: 24, md: 40 },
-          }}
-        />
+      
 
         {mdUp && (
           <StyledSection>

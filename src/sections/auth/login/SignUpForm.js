@@ -17,6 +17,8 @@ export default function SignUpForm() {
   const [signUpState,setsignUpState] = useState({
     showPassword : false,
     showConfirmPassword: false,
+    firstname: "",
+    lastname: "",
     email:"",
     password:"",
     confirmpassword:""
@@ -57,6 +59,9 @@ export default function SignUpForm() {
   return (
     <>
       <Stack spacing={3} sx={{mb:2}}>
+      <TextField name="firstname" label="First Name" onChange={(event)=> handleChange(event)} value={signUpState.firstname}/>
+      <TextField name="lastname" label="Last Name" onChange={(event)=> handleChange(event)} value={signUpState.lastname}/>
+
         <TextField name="email" label="Email address" onChange={(event)=> handleChange(event)} value={signUpState.email}/>
 
         <TextField

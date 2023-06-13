@@ -208,7 +208,6 @@ ShopProductCardCartlist.propTypes = {
 };
 
 export default function ShopProductCardCartlist({ product }) {
-  console.log(product)
   const { title, price, category, img, rating, _id } = product;
   const { mainState, setMainState } = useContext(MainContext);
   const [quantity, setQuantity] = useState(1);
@@ -225,7 +224,6 @@ export default function ShopProductCardCartlist({ product }) {
   const handleDeleteProduct = () => {
     const updatedCartlist = mainState.cartlist.filter((data) => data.id !== product.id);
     setMainState({ ...mainState, cartlist: updatedCartlist });
-    console.log("dddddd", updatedCartlist);
     setShowAlert(false);
   };
 
@@ -256,7 +254,6 @@ export default function ShopProductCardCartlist({ product }) {
       }
     }
     setMainState({ ...mainState, cartlist: updateQuntityData });
-    console.log(mainState.cartlist);
   }, [quantity]);
 
   const handleIncrement = () => {

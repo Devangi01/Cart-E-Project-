@@ -27,7 +27,6 @@ export default function ShopProductCardWishlist({ product }) {
   const { title, price, category, img, rating, _id } = product;
   const { mainState, setMainState } = useContext(MainContext);
   const cartlist = mainState.cartlist;
-  console.log("cartList", cartlist, product);
   const isProductCartlist = cartlist.some((cartProduct) => cartProduct.id === product.id);
 
 
@@ -37,11 +36,9 @@ export default function ShopProductCardWishlist({ product }) {
     alertObject.type = "error";
     const updatedWishlist = mainState.wishlist.filter((data) => data.id !== product.id);
     setMainState({ ...mainState, wishlist: updatedWishlist, alertBox: alertObject });
-    console.log("dddddd", updatedWishlist)
   };
 
   const handleCartClick = () => {
-    console.log("isProductCartlist :", isProductCartlist);
     if (isProductCartlist) {
       const alertObject = mainState.alertBox;
       alertObject.text = title.concat(" removed from the cart list");

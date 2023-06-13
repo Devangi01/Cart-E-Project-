@@ -29,11 +29,10 @@ const SORT_OPTIONS = [
 export default function WishlistPage() {
   const {mainState, setMainState} = useContext(MainContext)
 
-  console.log("BLog",mainState.wishlist)
   return (
     <>
       <Helmet>
-        <title> Dashboard: Blog | Minimal UI </title>
+        <title> Cart-E | Wishlist </title>
       </Helmet>
 
       <Container>

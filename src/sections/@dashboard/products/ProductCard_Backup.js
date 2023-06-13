@@ -75,7 +75,7 @@ const handleWishlistAndCartIconClick = (name)=>{
   
 }
 
-  console.log(mainState)
+
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>

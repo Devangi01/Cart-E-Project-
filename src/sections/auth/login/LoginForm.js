@@ -22,6 +22,8 @@ export default function LoginForm() {
   const navigate = useNavigate();
  
   const [loginState, setLoginState] = useState({
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     showPassword: false,
@@ -34,11 +36,12 @@ export default function LoginForm() {
    setLoginState({...loginState, [event.target.name]: event.target.value})
   }
   const encodedToken = localStorage.getItem("token");
-  console.log(encodedToken)
   const handleClick = async () => {
     
     try {
       const response = await axios.post(`/api/auth/login`, {
+        firstname: loginState.firstname,
+        lastname: loginState.lastname,
         email: loginState.email,
         password: loginState.password,
         headers: {
@@ -46,7 +49,7 @@ export default function LoginForm() {
         },
         
       });
-      console.log(response)
+      console.log("loginResponse",response.email)
       // saving the encodedToken in the localStorage
       // if(response.status){
       //   alert(response.status);
@@ -71,10 +74,10 @@ export default function LoginForm() {
       navigate('/cart'); // Navigating to the cart page if logged in
     }
   }, [mainState.isLoggedIn, navigate]);
-console.log(mainState.isLoggedIn)
   return (
     <>
       <Stack spacing={3}>
+        
         <TextField name="email" label="Email address" onChange={(event)=> handleChange(event)} value={loginState.email}/>
 
         <TextField

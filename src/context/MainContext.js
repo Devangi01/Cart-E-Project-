@@ -31,6 +31,6 @@ export const MainProvider = ({ children }) => {
   });
 
 
-  console.log(mainState.wishlist)
+
   return <MainContext.Provider value={{ mainState, setMainState }}>{children}</MainContext.Provider>;
 };

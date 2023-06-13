@@ -79,7 +79,6 @@ export default function Cartlist() {
       alert("Please add the address details");
     }
   }
-  console.log('BLog', mainState.cartlist);
   useEffect(() => {
     // Calculate total sum
 
@@ -112,24 +111,21 @@ export default function Cartlist() {
     //   addDetails: ''
     // })
   }
-  console.log("Data******", mainState.saveAddressData);
 
 
   const handleEditDeleteButton = (id, buttonType) => {
     if (buttonType === "Edit") {
       const tempData = mainState.saveAddressData.filter((data) => data.id === id);
-      console.log("tempData=======>>>>", tempData)
       setMainState({ ...mainState, address: { id: tempData[0].id, firstName: tempData[0].firstName, lastName: tempData[0].lastName, addDetails: tempData[0].addDetails } })
     } else {
       const filterData = mainState.saveAddressData.filter((data) => data.id !== id);
       setMainState({ ...mainState, saveAddressData: filterData });
     }
   }
-  console.log("After Save", address)
   return (
     <>
       <Helmet>
-        <title> Dashboard: Cart | Minimal UI </title>
+        <title>  Cart-E | Cart  </title>
       </Helmet>
 
       <Container>

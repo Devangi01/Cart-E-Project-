@@ -69,7 +69,7 @@ export default function ShopProductCard({ product }) {
 
   };
 
-  console.log("FINAL", mainState)
+  
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
