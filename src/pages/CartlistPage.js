@@ -73,7 +73,7 @@ export default function Cartlist() {
   }
   const handlePlaceOrderClick = () => {
     if (mainState.saveAddressData.length > 0) {
-      alert("Your order is placed")
+      alert("Your order is placed successfull")
       setOpen(false);
     } else {
       alert("Please add the address details");
